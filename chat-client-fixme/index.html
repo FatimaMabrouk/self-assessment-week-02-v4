@@ -39,14 +39,16 @@
     <script src="js/setup.js"></script>
     <script>
       // Get messages every 7.5 seconds
-      getData();
-      setInterval(getData, 7500);
+      
 
       $('.submit').on('submit', function(event) {
         event.preventDefault();
         var username = $('.usernameInput').val();
         $('#backButton').toggle();
         $('.title').text('Chat with JSON');
+
+        getData($('.userInput').val(),username); // get username and masseges ;
+        setInterval(getData, 7500);
 
         postData($('.userInput').val(), username);
         $('.userInput').val('');

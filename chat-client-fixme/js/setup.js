@@ -9,9 +9,18 @@ $.ajaxPrefilter(function(settings, _, jqXHR) {
 var SERVER_URL = 'http://parse.shared.hackreactor.com/chatterbox/classes/messages';
 
 //This one calls the Parse server to grab data, and sends it to processData
-var getData = function() {
-  $.ajax(SERVER_URL + '?order=-createdAt', {
+// SERVER_URL + '?order=-createdAt',
+var getData = function(message, username) {
+  $.ajax({
+    url: SERVER_URL,
     contentType: 'application/json',
+    type : 'GET', // get data 
+    username: username,  // we have to get the user name and masseges 
+    text: message,
+    data: JSON.stringify({
+    username: username,
+    text: message
+    }),
     success: function(data) {
       processData(data); // eslint-disable-line no-use-before-define
     },
@@ -90,7 +99,9 @@ var displayData = function(data, user) {
       } else {
         $('.title').text(userSelected);
       }
-      getData();
+      getData($userName,$message);
+       // take massege and username;
+       
     }
   });
 
@@ -100,7 +111,7 @@ var displayData = function(data, user) {
     } else {
       userSelectedGroup[$(this).closest('li').data('username')] = true;
     }
-    getData();
+    getData($message,$userName ); // get masseges and username ;
   });
 };
 
@@ -110,14 +121,17 @@ var postData = function(message, username) {
     contentType: 'application/json',
     type: 'POST',
     data: JSON.stringify({
-      username: username,
-      text: message
+    username: username,
+    text: message
     }),
+
     success: function(data) {
       console.log('Success!', data);
     },
+
     error: function(data) {
       console.log(data);
     }
+
   });
 };
